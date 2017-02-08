@@ -3,7 +3,6 @@
 //  SampleContactList
 //
 //  Created by Stephen Lindauer on 2/8/17.
-//  Copyright © 2017 Stephen Lindauer. All rights reserved.
 //
 
 import UIKit

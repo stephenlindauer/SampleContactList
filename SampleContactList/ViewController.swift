@@ -3,23 +3,69 @@
 //  SampleContactList
 //
 //  Created by Stephen Lindauer on 2/8/17.
-//  Copyright © 2017 Stephen Lindauer. All rights reserved.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
 
+    let indexes = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    @IBOutlet weak var tableView: UITableView!
+    var contactsBySection: [String: Array<String>] = [:]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        getContactsFromPlist()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
+    // Read the Contacts.plist file and populate contactsBySection
+    func getContactsFromPlist() {
+        if let path = Bundle.main.path(forResource: "Contacts", ofType: "plist") {
+            contactsBySection = NSDictionary(contentsOfFile: path) as! [String: Array<String>]
+        }
+    }
 }
 
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return contactsBySection.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return indexes[section]
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return indexes
+    }
+    
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        return index
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let contacts = contactsBySection[indexes[section]]!
+        return contacts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        
+        let contacts = contactsBySection[indexes[indexPath.section]]!
+        let contact = contacts[indexPath.row]
+        
+        cell.textLabel!.text = contact
+        
+        return cell
+    }
+    
+}
